@@ -21,22 +21,22 @@ public class CdrGeneratorService {
         Random random = new Random();
         int recordAmount = random.nextInt(10,20);
         List<Customer> customerList = customerRepository.findAll();
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime startingTime = currentTime.minusYears(1).minusSeconds(recordAmount * random.nextLong(1,100000000));
+        LocalDateTime currentTime = LocalDateTime.now(); // change
+        LocalDateTime startingTime = currentTime.minusYears(1);
         for (int i = 0; i < recordAmount; i++){
             CdrRecord cdrRecord = new CdrRecord();
             var calleeIndex = random.nextInt(0,customerList.size());
             var callerIndex = random.nextInt(0,customerList.size());
-            var timeDifference = (currentTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)) - startingTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)))/(recordAmount-i) + random.nextLong(1,currentTime.toEpochSecond(null) - startingTime.toEpochSecond(null));
+            var timeDifference = random.nextLong(1,5000);
             while(callerIndex == calleeIndex){
                 callerIndex = random.nextInt(0,customerList.size());
             }
-            cdrRecord.setCallType("0" + random.nextInt(0,2));
+            cdrRecord.setCallType("0" + random.nextInt(1,3));
             cdrRecord.setCalleeNumber(customerList.get(calleeIndex).getNumber());
             cdrRecord.setCallerNumber(customerList.get(callerIndex).getNumber());
             cdrRecord.setCallStartDateTime(startingTime);
             startingTime = startingTime.plusSeconds(timeDifference);
-            cdrRecord.setCallEndDateTime(LocalDateTime.ofEpochSecond(timeDifference, 0, ZoneOffset.ofTotalSeconds(0)));
+            cdrRecord.setCallEndDateTime(startingTime);
             cdrRecordRepository.save(cdrRecord);
         }
     }
