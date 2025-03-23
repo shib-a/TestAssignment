@@ -6,11 +6,18 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
+/**
+ * Класс для преставления объекта UDR
+ * Содержит номер абонента, суммарное время входящих звонков и суммарное время исходящих звонков.
+ */
 @Data
 public class UdrRecord {
     private String number;
     private Duration incomingCallTotalTime;
     private Duration outcomingCallTotalTime;
+    /**
+     * Переопределяет строковое представление на указанное в примере.
+     */
     @Override
     public String toString(){
         return "{\"msisidn\": \"" + number

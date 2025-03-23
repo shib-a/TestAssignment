@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+/**
+ * Этот класс представляет объект CDR записи.
+ * Он содержит ID, тип звонка, номер звонящего, номер принимающего звонок, дату и время начала звонка, а также дату и время конца звонка.
+ */
 @Entity
 @Data
 public class CdrRecord {

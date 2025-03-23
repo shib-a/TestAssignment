@@ -3,10 +3,14 @@ package com.project.testassignment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.Month;
 import java.util.List;
-
+/**
+ * JPA репозиторий для класса CdrRecord
+ */
+@Repository
 public interface CdrRecordRepository extends JpaRepository<CdrRecord, Long> {
     @Query("select r from CdrRecord r where function('MONTH', r.callStartDateTime) = :month")
     List<CdrRecord> findAllByCallStartDateTimeMonth(@Param("month") int month);

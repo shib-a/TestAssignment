@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/**
+ * Контроллер, содержащий эндпоинты REST API.
+ * @author Martyshov Danila
+ */
 @Controller
 @RequestMapping("/api/udr")
 @CrossOrigin
@@ -26,16 +29,25 @@ public class UdrController {
         this.customerRepository = customerRepository;
         this.cdrRecordRepository = cdrRecordRepository;
     }
+    /**
+     * Этот метод по запросу post генерирует новые CDR записи в базу данных
+     */
     @PostMapping("/generate")
     public void generateCdr(){
         cdrGeneratorService.generate();
     }
 
+    /**
+     * Этот метод является реализацией первого условия второго задания. Возвращает UDR по указанному абоненту за срок, указанный в параметре - либо за месяц (параметр равен от 1 до 12), либо за все время обслуживания.
+     * @param customerId - целочисленный ID пользователя
+     * @param month - параметр запроса - месяц от 1 до 12 или другое целочисленное значение/null.
+     * @return UDR запись
+     */
     @GetMapping("/getUdrByCustomer/{customerId}")
     public ResponseEntity<UdrRecord> getUdrByCustomer(@PathVariable("customerId") Long customerId, @Param("month") Integer month){
         var customer = customerRepository.findById(customerId).get();
         List<CdrRecord> cdrList;
-        if (!(month <= 12 && month >= 1)){
+        if (month==null || !(month <= 12 && month >= 1)){
             cdrList = cdrRecordRepository.findAllByCustomer(customer.getNumber());
         } else {
             cdrList = cdrRecordRepository.findAllByCallStartDateTimeMonthAndCustomer(month, customer.getNumber());
@@ -67,8 +79,16 @@ public class UdrController {
         return ResponseEntity.ok(udr);
     }
 
+    /**
+     * Этот метод является реализацией второго условия второго задания. Возвращает UDR по всем абонентам за указанный месяц.
+     * @param month - параметр запроса - месяц от 1 до 12.
+     * @return Список UDR записей
+     */
     @GetMapping("/getUdrsByMonth/{month}")
-    public ResponseEntity<List<UdrRecord>> getUdrsByMonth(@PathVariable("month") int month){
+    public ResponseEntity<List<UdrRecord>> getUdrsByMonth(@PathVariable("month") Integer month){
+        if (month==null || !(month <= 12 && month >= 1)){
+            return ResponseEntity.badRequest().body(null);
+        }
         var cdrList = cdrRecordRepository.findAllByCallStartDateTimeMonth(month);
         var udrMap = new HashMap<String, UdrRecord>();
         for (var cdr: cdrList){
