@@ -15,6 +15,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Класс для тестирования эндпоинтов
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UdrControllerTest {
@@ -27,6 +30,9 @@ public class UdrControllerTest {
         this.cdrRecordRepository = cdrRecordRepository;
         this.mockMvc = mockMvc;
     }
+    /**
+     * Тест первлшл требования второго задания (эндпоинита "/api/udr/getUdrByCustomer/{id}"), без указания месяцв
+     */
     @Test
     @Transactional
     public void testGetUdrByCustomerAllPeriod() throws Exception{
@@ -50,6 +56,9 @@ public class UdrControllerTest {
                 .param("month", String.valueOf(0)))
                 .andExpect(status().isOk()).andExpect(content().string(String.format("{\"number\":\"71111111\",\"incomingCallTotalTime\":\"%s\",\"outcomingCallTotalTime\":\"%s\"}", expectedIncomingTime, expectedOutcomingTime)));
     }
+    /**
+     * Тест первлшл требования второго задания (эндпоинита "/api/udr/getUdrByCustomer/{id}"), с указанием месяца
+     */
     @Test
     @Transactional
     public void testGetUdrByCustomerInMarch() throws Exception{
@@ -67,6 +76,9 @@ public class UdrControllerTest {
                         .param("month", String.valueOf(3)))
                 .andExpect(status().isOk()).andExpect(content().string(String.format("{\"number\":\"71111111\",\"incomingCallTotalTime\":\"%s\",\"outcomingCallTotalTime\":\"%s\"}", expectedIncomingTime, expectedOutcomingTime)));
     }
+    /**
+     * Тест второго требования второго задания (эндпоинита "/api/udr/getUdrsByMonth/{month}")
+     */
     @Test
     @Transactional
     public void testGetUdrsByMonthInMarch() throws Exception{
@@ -93,6 +105,9 @@ public class UdrControllerTest {
         mockMvc.perform(get(String.format("/api/udr/getUdrsByMonth/%s", 3)))
                 .andExpect(status().isOk()).andExpect(content().string(String.format("[{\"number\":\"%s\",\"incomingCallTotalTime\":\"%s\",\"outcomingCallTotalTime\":\"%s\"},{\"number\":\"%s\",\"incomingCallTotalTime\":\"%s\",\"outcomingCallTotalTime\":\"%s\"}]", firstCustomer, firstCustomerExpectedIncomingTime, firstCustomerExpectedOutcomingTime, secondCustomer, secondCustomerExpectedIncomingTime, secondCustomerExpectedOutcomingTime)));
     }
+    /**
+     * Метод, вызывающий генерацию записей, и проверяющий успешность запроса.
+     */
     @Test
     @Transactional
     public void testGeneration() throws Exception {
@@ -100,7 +115,9 @@ public class UdrControllerTest {
         mockMvc.perform(post("/api/udr/generate"))
                 .andExpect(status().isOk());
     }
-
+    /**
+     * Метод, инициализирубщмй базу данных тестовыми значениями
+     */
     @Test
     @Transactional
     public void initializeDatabase(){
