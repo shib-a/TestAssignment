@@ -90,8 +90,6 @@ public class UdrControllerTest {
                 LocalDateTime.of(2025,3,20,16,33,20),
                 LocalDateTime.of(2025,3,20,22,33,20)
         );
-
-
         mockMvc.perform(get(String.format("/api/udr/getUdrsByMonth/%s", 3)))
                 .andExpect(status().isOk()).andExpect(content().string(String.format("[{\"number\":\"%s\",\"incomingCallTotalTime\":\"%s\",\"outcomingCallTotalTime\":\"%s\"},{\"number\":\"%s\",\"incomingCallTotalTime\":\"%s\",\"outcomingCallTotalTime\":\"%s\"}]", firstCustomer, firstCustomerExpectedIncomingTime, firstCustomerExpectedOutcomingTime, secondCustomer, secondCustomerExpectedIncomingTime, secondCustomerExpectedOutcomingTime)));
     }

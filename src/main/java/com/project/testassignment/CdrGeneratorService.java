@@ -21,7 +21,7 @@ public class CdrGeneratorService {
         Random random = new Random();
         int recordAmount = random.nextInt(10,20);
         List<Customer> customerList = customerRepository.findAll();
-        LocalDateTime currentTime = LocalDateTime.now(); // change
+        LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime startingTime = currentTime.minusYears(1);
         for (int i = 0; i < recordAmount; i++){
             CdrRecord cdrRecord = new CdrRecord();
